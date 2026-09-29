@@ -235,7 +235,7 @@ html.lenis { scroll-behavior: auto; }
 .hero__brand {
   display: block;
   font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(52px, 10.5vw, 148px);
+  font-size: clamp(44px, 8vw, 116px);
   line-height: 1.04;
   letter-spacing: -0.02em;
 }
