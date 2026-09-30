@@ -178,12 +178,6 @@
     touchStart = null;
   }, { passive: true });
 
-  $$('input[name="slot"]').forEach((radio) => radio.addEventListener('change', () => {
-    const late = radio.value === 'late';
-    $('#price').textContent = late ? '140,000' : '120,000';
-    $('#price-note').textContent = late ? '2시간 기준 · 심야 추가 요금 포함 · 부가세 별도' : '2시간 기준 · 부가세 별도';
-  }));
-
   const toast = $('.toast');
   let toastTimer;
   function notify(message) {
@@ -193,7 +187,7 @@
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 4500);
   }
   $('.copy-address').addEventListener('click', async () => {
-    const address = '경기도 고양시 덕양구 화랑로286번길 30';
+    const address = '경기도 고양시 덕양구 항공대학로 90-1';
     try { await navigator.clipboard.writeText(address); notify('주소를 복사했습니다. 지도 앱에 붙여넣어 주세요.'); }
     catch { notify(`자동 복사가 지원되지 않습니다. 주소: ${address}`); }
   });

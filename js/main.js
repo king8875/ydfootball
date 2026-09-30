@@ -35,7 +35,8 @@
     if (open) header.classList.remove('is-hidden');
     menuBtn.setAttribute('aria-expanded', String(open));
     menuLabel.textContent = open ? '닫기' : '메뉴';
-    document.body.style.overflow = open ? 'hidden' : '';
+    // 스크롤 잠금은 html에 걸어야 scrollbar-gutter가 적용돼 레이아웃이 밀리지 않음
+    document.documentElement.style.overflow = open ? 'hidden' : '';
     if (lenis) { if (open) lenis.stop(); else lenis.start(); }
     if (open) setTimeout(() => $('a', nav).focus(), 60);
   };
@@ -188,8 +189,9 @@
     [...brandText].map((c) => `<span class="char-mask"><span class="char">${c}</span></span>`).join('')
   }</span>`;
 
-  const HEADS = '.about .h2, .rental .h2, .gallery .h2, .guide .h2, .booking .h2, .location .h2, .caution .h2, .faq .h2, .cta__title';
-  const ROWS = '.spec-table > div, .rental__list li, .dos li, .guide .info-table > div, .fee__table tr, .refund__table tbody tr, .caution__list li, .faq__list details, .info-table--dark > div';
+  // 모든 섹션이 같은 구조(.section-head)라 선택자도 하나로 통일
+  const HEADS = '.section-head';
+  const ROWS = '.section-body .info-table > div, .fee__table tr, .refund__table tbody tr, .rental__list li, .rules li, .faq__list details';
 
   // 목록 행: 화면에 들어올 때 순서대로 등장
   const batchRows = (y, stagger) => {
@@ -228,7 +230,7 @@
     batchRows(24, 0.07);
 
     // 사진 패럴랙스 (프레임 안에서 사진만 움직임)
-    ['.about__media img', '.rental__media img'].forEach((sel) => {
+    ['.about__media img'].forEach((sel) => {
       gsap.fromTo(sel, { yPercent: -6, scale: 1.12 }, {
         yPercent: 6, scale: 1.12, ease: 'none',
         scrollTrigger: { trigger: $(sel).parentElement, start: 'top bottom', end: 'bottom top', scrub: true },
@@ -245,9 +247,9 @@
     gallery.classList.add('is-track');
 
     // 가로로 밀려 있는 사진은 lazy 로딩이 이동 중에 시작돼 끊김이 생김
-    // → 바로 앞 섹션(장비 대여)에 들어서면 미리 받아서 디코딩까지 끝내 둠
+    // → 바로 앞 섹션(요금 · 예약)에 들어서면 미리 받아서 디코딩까지 끝내 둠
     ScrollTrigger.create({
-      trigger: '.rental', start: 'top bottom', once: true,
+      trigger: '#booking', start: 'top bottom', once: true,
       onEnter: () => $$('img', track).forEach((img) => {
         img.loading = 'eager';
         if (img.decode) img.decode().catch(() => {});

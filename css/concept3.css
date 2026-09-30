@@ -11,12 +11,14 @@
   --header: 58px;
 }
 * { box-sizing: border-box; }
-html { scroll-padding-top: var(--header); -webkit-text-size-adjust: 100%; }
+/* 메뉴가 열려 스크롤이 잠겨도 스크롤바 자리를 비워 둬 레이아웃이 옆으로 밀리지 않게 함 */
+html { scroll-padding-top: var(--header); -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
 body { margin: 0; background: var(--black); color: var(--white); font: 16px/1.65 var(--body); word-break: keep-all; overflow-wrap: break-word; }
-body.is-menu-open { overflow: hidden; }
+/* 스크롤 잠금은 html에 걸어야 scrollbar-gutter가 적용됨 (body에 걸면 스크롤바 자리가 사라짐) */
+html:has(body.is-menu-open) { overflow: hidden; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 button { border: 0; color: inherit; font: inherit; cursor: pointer; }
@@ -33,6 +35,7 @@ address { font-style: normal; }
 .site-logo img { width: 190px; height: auto; }
 .site-nav { margin-left: auto; display: flex; gap: clamp(18px, 2.3vw, 38px); }
 .site-nav a, .header-book, .menu-button { font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+.site-nav a { font-size: 14px; }
 .site-nav a { position: relative; padding-block: 8px; }
 .site-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: currentColor; opacity: 0; transform: scaleX(.35); transition: opacity .2s, transform .2s; }
 .site-nav a:hover::after, .site-nav a:focus-visible::after { opacity: 1; transform: scaleX(1); }
@@ -44,7 +47,7 @@ address { font-style: normal; }
 .hero-bg { position: absolute; z-index: -3; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scale(1.08); will-change: transform; }
 .hero-shade { position: absolute; z-index: -2; inset: 0; background: rgba(8, 12, 9, .42); }
 .hero-meta { position: absolute; top: calc(var(--header) + 28px); left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; font: 500 12px var(--display); letter-spacing: .11em; }
-.hero-title { position: absolute; z-index: 2; inset: 12vh var(--gutter) auto; display: flex; flex-direction: column; color: var(--white); font: 400 clamp(105px, 17vw, 260px)/.68 var(--display); letter-spacing: -.045em; text-align: center; will-change: transform, opacity; }
+.hero-title { position: absolute; z-index: 2; inset: 12vh var(--gutter) auto; display: flex; flex-direction: column; color: var(--white); font: 400 clamp(96px, 15vw, 230px)/.84 var(--display); letter-spacing: -.045em; text-align: center; will-change: transform, opacity; }
 .hero-title span:nth-child(1) { align-self: flex-start; }
 .hero-title span:nth-child(2) { align-self: center; }
 .hero-title span:nth-child(3) { align-self: flex-end; }
@@ -68,6 +71,7 @@ address { font-style: normal; }
 .word-c { right: 12vw; bottom: 7vh; }
 .ground-frame { position: absolute; z-index: 1; left: 50%; top: 50%; width: min(34vw, 500px); height: 76vh; transform: translate(-50%, -50%); overflow: hidden; will-change: width, height; }
 .ground-frame img { width: 100%; height: 115%; object-fit: cover; will-change: transform; }
+.ground-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(7, 11, 18, .78) 0%, rgba(7, 11, 18, 0) 50%); pointer-events: none; }
 .ground-intro { position: absolute; z-index: 3; left: var(--gutter); bottom: 46px; width: min(440px, 35vw); opacity: 0; transform: translateY(30px); will-change: opacity, transform; }
 .ground-intro h2 { margin-block: 12px 16px; font-size: clamp(32px, 3.5vw, 54px); line-height: 1.15; letter-spacing: -.05em; }
 .ground-intro > p:last-child { color: rgba(255,255,255,.72); font-size: 14px; }
@@ -76,11 +80,12 @@ address { font-style: normal; }
 .facts-lead { position: sticky; top: 120px; align-self: start; }
 .facts-lead .section-label { color: #687067; }
 .facts-lead h2 { margin-top: 28px; font-size: clamp(42px, 5.5vw, 84px); line-height: 1.08; letter-spacing: -.06em; }
+.facts-lead > p:last-child { margin-top: 24px; max-width: 380px; color: #687067; }
 .fact-list > div { padding: 28px 0 36px; border-top: 1px solid #cdd2ca; }
 .fact-list dt { color: #687067; font-size: 12px; }
 .fact-list dd { margin-top: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
 .fact-list strong { font: 500 clamp(60px, 7.8vw, 120px)/1 var(--display); letter-spacing: -.035em; }
-.fact-list span { max-width: 240px; color: #687067; font-size: 13px; text-align: right; }
+.fact-list span { max-width: 330px; color: #687067; font-size: 13px; text-align: right; }
 
 .spaces-scroll { height: 390vh; background: var(--black); }
 .spaces-stage { display: grid; grid-template-columns: 30vw 1fr; background: var(--black); }
@@ -99,18 +104,18 @@ address { font-style: normal; }
 .spaces-count { position: absolute; z-index: 3; left: var(--gutter); bottom: 36px; display: flex; align-items: baseline; gap: 6px; font: 500 18px var(--display); }
 .spaces-current { font-size: 46px; color: var(--acid); }
 
-.rental-section { min-height: 100svh; display: grid; grid-template-columns: 1.05fr 1fr; background: #d9ded4; color: var(--black); }
-.rental-photo { position: relative; min-height: 760px; overflow: hidden; }
-.rental-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.rental-photo > span { position: absolute; left: 24px; bottom: 22px; padding: 8px 12px; background: var(--black); color: var(--white); font-size: 12px; }
+.rental-section { background: #d9ded4; color: var(--black); }
 .rental-content { padding: clamp(80px, 9vw, 140px) var(--gutter); }
 .rental-content .section-label { color: #626a61; }
 .rental-content h2 { margin-block: 30px 22px; font: 500 clamp(80px, 9.5vw, 150px)/.77 var(--display); letter-spacing: -.04em; }
-.rental-lead { color: #555d54; }
-.rental-list { margin-top: 48px; border-top: 1px solid #9fa79d; }
-.rental-list li { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid #b8beb5; }
-.rental-list small { color: #667064; }
-.rental-note { margin-top: 22px; color: #667064; font-size: 12px; }
+.rental-lead { max-width: 520px; color: #555d54; }
+.rental-items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 24px; margin-top: 56px; padding-top: 32px; border-top: 1px solid #9fa79d; }
+.rental-items figure { aspect-ratio: 1; padding: 24px; background: #eef1ea; }
+.rental-items picture, .rental-items img { width: 100%; height: 100%; object-fit: contain; }
+.rental-items h3 { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 17px; font-weight: 700; }
+.rental-items em { padding: 0 7px; border: 1px solid var(--black); font-size: 11px; font-style: normal; font-weight: 700; line-height: 1.7; }
+.rental-items p { margin-top: 4px; color: #667064; font-size: 13px; }
+.rental-note { margin-top: 32px; color: #667064; font-size: 12px; }
 
 .booking-section { position: relative; min-height: 100svh; padding: clamp(100px, 11vw, 160px) var(--gutter) 70px; isolation: isolate; }
 .booking-backdrop { position: absolute; z-index: -2; inset: 0; overflow: hidden; }
@@ -120,9 +125,6 @@ address { font-style: normal; }
 .booking-title h2 { margin-block: 24px; font: 400 clamp(100px, 13vw, 200px)/.74 var(--display); letter-spacing: -.05em; }
 .booking-title > p:last-child { max-width: 460px; color: rgba(255,255,255,.72); }
 .booking-panel { background: var(--acid); color: var(--black); padding: 32px; }
-.price-tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 30px; }
-.price-tabs button { padding: 13px 10px; background: #aecd44; font-size: 13px; }
-.price-tabs button.is-active { background: var(--black); color: var(--acid); }
 .booking-price { display: flex; align-items: baseline; gap: 8px; }
 .booking-price strong { font: 600 clamp(76px, 8vw, 122px)/.9 var(--display); }
 .booking-price span { font-size: 20px; font-weight: 700; }
@@ -139,6 +141,12 @@ address { font-style: normal; }
 .booking-flow li + li { padding-left: 20px; border-left: 1px solid var(--line); }
 .booking-flow span { font-size: 15px; font-weight: 700; }
 .booking-flow p { margin-top: 8px; color: var(--grey); font-size: 12px; }
+.booking-refund { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 20px; align-items: center; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); }
+.booking-refund h3 { font-size: 15px; font-weight: 700; }
+.booking-refund > div { padding-left: 20px; border-left: 1px solid var(--line); }
+.booking-refund span { display: block; color: var(--grey); font-size: 12px; }
+.booking-refund strong { display: block; margin-top: 6px; font-size: 16px; }
+.booking-refund > p { color: var(--grey); font-size: 12px; }
 
 .guide-section { min-height: 100svh; padding: clamp(100px, 11vw, 170px) var(--gutter); display: grid; grid-template-columns: .8fr 1.2fr; gap: 10vw; background: var(--white); color: var(--black); }
 .guide-heading { position: sticky; top: 110px; align-self: start; }
@@ -152,43 +160,77 @@ address { font-style: normal; }
 .guide-list summary::after { content: "+"; position: absolute; right: 4px; top: 50%; translate: 0 -50%; font: 400 26px var(--display); }
 .guide-list details[open] summary::after { content: "−"; }
 .guide-answer { padding: 0 46px 28px 0; overflow: hidden; color: #626a61; font-size: 14px; }
+.guide-subtitle { padding-bottom: 14px; border-bottom: 1px solid #aeb5aa; font-size: 15px; font-weight: 700; }
+.guide-subtitle:not(:first-child) { margin-top: 64px; }
+.guide-info div { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 15px 0; border-bottom: 1px solid #c7ccc4; font-size: 15px; }
+.guide-info dt { color: #626a61; }
+.guide-info dd { font-weight: 700; }
+.guide-note { margin-top: 14px; color: #626a61; font-size: 13px; }
+.guide-rules li { display: grid; grid-template-columns: 36px 1fr; padding: 16px 0; border-bottom: 1px solid #c7ccc4; }
+.guide-rules li > span { font: 500 18px/1.5 var(--display); color: #8a9287; }
+.guide-rules strong { display: block; font-size: 17px; }
+.guide-rules p { margin-top: 4px; color: #626a61; font-size: 14px; }
+.faq-section { border-top: 1px solid #c7ccc4; }
 
 .location-section { min-height: 100svh; display: grid; grid-template-columns: 1.15fr 1fr; background: #0b0f0c; }
 .location-image { min-height: 700px; overflow: hidden; }
 .location-image img { width: 100%; height: 100%; object-fit: cover; }
 .location-info { padding: clamp(90px, 10vw, 150px) var(--gutter); }
 .location-info h2 { margin-block: 28px 34px; font: 400 clamp(86px, 10vw, 156px)/.76 var(--display); letter-spacing: -.04em; }
+.location-lead { margin: -14px 0 30px; max-width: 420px; color: var(--grey); }
 .location-info address { font-size: clamp(20px, 2vw, 28px); font-weight: 700; line-height: 1.5; }
 .copy-address { margin-top: 12px; padding: 8px 0; background: transparent; color: var(--grey); text-decoration: underline; text-underline-offset: 4px; }
 .location-info dl { margin-block: 34px; border-top: 1px solid var(--line); }
 .location-info dl div { display: flex; justify-content: space-between; gap: 24px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
 .location-info dt { color: var(--grey); }
+.location-info .is-key dd { color: var(--acid); font-size: 16px; font-weight: 700; }
 .map-link { display: block; padding: 17px; background: var(--acid); color: var(--black); text-align: center; font-weight: 700; }
+.map-link--line { margin-top: 8px; background: transparent; color: var(--white); border: 1px solid var(--line); }
 
-.site-footer { padding: 70px var(--gutter) 26px; background: var(--black); }
-.footer-call { padding-bottom: 56px; border-bottom: 1px solid var(--line); }
-.footer-call > span { display: block; color: var(--grey); font-size: 12px; }
-.footer-call a { display: inline-block; margin-top: 10px; font: 400 clamp(64px, 10vw, 150px)/1 var(--display); letter-spacing: -.03em; }
-.footer-meta { padding-top: 28px; display: grid; grid-template-columns: 1fr 2fr auto; gap: 40px; align-items: end; color: var(--grey); font-size: 11px; }
+/* 아래 여백이 26px뿐이라 마지막 줄이 화면 끝에 붙어 잘린 것처럼 보였음 → 위아래 여백을 같게 */
+.site-footer { padding: 64px var(--gutter); background: var(--black); }
+.footer-meta { padding-top: 0; display: grid; grid-template-columns: 1fr 2fr auto; gap: 40px; align-items: end; color: var(--grey); font-size: 11px; }
 .footer-meta img { width: 190px; }
 .mobile-actions { display: none; }
 .toast { position: fixed; z-index: 200; left: 50%; bottom: 28px; translate: -50% 16px; opacity: 0; pointer-events: none; padding: 12px 18px; background: var(--acid); color: var(--black); font-size: 13px; transition: opacity .25s, translate .25s; }
 .toast.is-visible { opacity: 1; translate: -50% 0; }
 
 @media (max-width: 960px) {
-  .site-nav { display: none; position: fixed; inset: var(--header) 0 0; margin: 0; padding: 40px var(--gutter); flex-direction: column; gap: 0; background: var(--black); mix-blend-mode: normal; }
-  .site-nav.is-open { display: flex; }
+  .site-nav {
+    position: fixed; inset: var(--header) 0 0; margin: 0; padding: 40px var(--gutter);
+    display: flex; flex-direction: column; gap: 0; background: var(--black); mix-blend-mode: normal;
+    /* 닫힘: 보이지 않고 포커스도 받지 않음. visibility는 페이드가 끝난 뒤에 바뀜 */
+    visibility: hidden; opacity: 0; transform: translateY(-12px); pointer-events: none;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .4s;
+  }
+  .site-nav.is-open {
+    visibility: visible; opacity: 1; transform: none; pointer-events: auto;
+    transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), visibility 0s;
+  }
+  /* 메뉴 항목은 위에서부터 차례로 올라옴 */
+  .site-nav a { opacity: 0; transform: translateY(14px); transition: opacity .3s ease, transform .45s cubic-bezier(.2, .7, .2, 1); }
+  .site-nav.is-open a { opacity: 1; transform: none; }
+  .site-nav.is-open a:nth-child(2) { transition-delay: .04s; }
+  .site-nav.is-open a:nth-child(3) { transition-delay: .08s; }
+  .site-nav.is-open a:nth-child(4) { transition-delay: .12s; }
+  .site-nav.is-open a:nth-child(5) { transition-delay: .16s; }
+  .site-nav.is-open a:nth-child(6) { transition-delay: .2s; }
+  .site-nav.is-open a:nth-child(7) { transition-delay: .24s; }
+  /* 헤더의 mix-blend-mode(difference) 때문에 메뉴의 검은 배경이 투명하게 보임 → 메뉴가 열리면 블렌드 해제 */
+  body.is-menu-open .site-header { mix-blend-mode: normal; background: var(--black); }
   .site-nav a { padding: 18px 0; border-bottom: 1px solid var(--line); font-size: 22px; }
   .site-nav a::after { display: none; }
   .header-book { margin-left: auto; }
   .menu-button { display: block; }
-  .hero-title { font-size: clamp(92px, 18vw, 170px); }
+  .hero-title { font-size: clamp(84px, 16vw, 150px); }
   .ground-words span { font-size: clamp(90px, 17vw, 170px); }
   .ground-frame { width: min(46vw, 460px); }
   .facts-section { grid-template-columns: 1fr; }
   .facts-lead { position: static; }
   .spaces-stage { grid-template-columns: 34vw 1fr; }
-  .rental-section { grid-template-columns: 1fr 1fr; }
+  .rental-items { grid-template-columns: repeat(2, 1fr); }
+  .booking-refund { grid-template-columns: 1fr 1fr 1fr; }
+  .booking-refund h3, .booking-refund > p { grid-column: 1 / -1; }
   .rental-content h2 { font-size: clamp(66px, 10vw, 110px); }
   .booking-wrap { gap: 5vw; }
   .booking-title h2 { font-size: clamp(82px, 13vw, 140px); }
@@ -201,8 +243,9 @@ address { font-style: normal; }
   :root { --header: 54px; --gutter: 20px; }
   .site-logo img { width: 170px; }
   .header-book { display: none; }
+  .menu-button { margin-left: auto; }   /* 예약 버튼이 숨으면 MENU를 오른쪽 끝으로 */
   .hero-scroll { height: 170vh; }
-  .hero-title { top: 15vh; font-size: clamp(72px, 22vw, 108px); line-height: .72; }
+  .hero-title { top: 15vh; font-size: clamp(64px, 19vw, 96px); line-height: .86; }
   .hero-window--play { left: 22%; top: 34%; width: 32vw; }
   .hero-window--under { left: 50%; top: 53%; width: 44vw; }
   .hero-window--roof { left: 78%; top: 68%; width: 32vw; }
@@ -236,8 +279,14 @@ address { font-style: normal; }
   .space-card--wide { flex-basis: 88vw; }
   .spaces-count { left: var(--gutter); bottom: 12px; }
   .spaces-current { font-size: 34px; }
-  .rental-section { display: block; }
-  .rental-photo { min-height: 58vh; }
+  .rental-items { gap: 28px 12px; }
+  .rental-items figure { padding: 14px; }
+  .rental-items h3 { flex-wrap: wrap; font-size: 15px; }
+  .booking-refund { grid-template-columns: 1fr; gap: 0; }
+  .booking-refund > div { display: flex; justify-content: space-between; padding: 12px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .booking-refund strong { margin-top: 0; }
+  .booking-refund > p { margin-top: 12px; }
+  .guide-info div { grid-template-columns: 88px 1fr; gap: 12px; font-size: 14px; }
   .rental-content { padding: 70px var(--gutter); }
   .rental-content h2 { font-size: 76px; }
   .booking-section { padding: 80px var(--gutter) 64px; }
@@ -257,7 +306,6 @@ address { font-style: normal; }
   .location-info { padding: 70px var(--gutter); }
   .location-info h2 { font-size: 78px; }
   .site-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
-  .footer-call a { font-size: 56px; }
   .footer-meta { grid-template-columns: 1fr; gap: 20px; }
   .footer-meta img { width: 170px; }
   .mobile-actions { position: fixed; z-index: 90; inset: auto 0 0; display: grid; grid-template-columns: 1fr 1.8fr; padding-bottom: env(safe-area-inset-bottom); background: var(--black); border-top: 1px solid var(--line); }

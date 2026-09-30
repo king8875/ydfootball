@@ -54,7 +54,8 @@
     heroCopy.style.opacity = String(clamp(1 - hp * 2));
 
     const gp = sceneProgress(ground);
-    const frameWidth = innerWidth < 681 ? 58 + gp * 38 : 34 + gp * 58;
+    // 스크롤 끝(gp = 1)에서 너비 100vw · 높이 100vh로 화면 전체를 채움
+    const frameWidth = innerWidth < 681 ? 58 + gp * 42 : 34 + gp * 66;
     groundFrame.style.width = `${frameWidth}vw`;
     groundFrame.style.height = `${76 + gp * 24}vh`;
     groundImage.style.transform = `translate3d(0, ${-gp * 10}%, 0) scale(${1.08 - gp * .08})`;
@@ -81,13 +82,6 @@
   });
   document.fonts?.ready.then(requestRender);
   requestRender();
-
-  $$('.price-tabs button').forEach((button) => button.addEventListener('click', () => {
-    $$('.price-tabs button').forEach((item) => item.classList.toggle('is-active', item === button));
-    const late = button.dataset.price === '140000';
-    $('#c3-price').textContent = late ? '140,000' : '120,000';
-    $('#c3-price-caption').textContent = late ? '2시간 기준 · 심야 추가 요금 포함 · 부가세 별도' : '2시간 기준 · 부가세 별도';
-  }));
 
   $$('.guide-list details').forEach((details) => {
     const summary = $('summary', details);
