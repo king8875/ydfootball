@@ -1281,6 +1281,46 @@ address {
 .mobile-booking {
   display:none
 }
+/* 맨 위로: 갤러리의 원형 버튼과 같은 모양 */
+.to-top {
+  position:fixed;
+  z-index:85;
+  right:var(--gutter);
+  bottom:var(--s6);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--ink);
+  color:var(--lime);
+  border:1px solid #505846;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(12px);
+  transition:opacity .25s,transform .25s var(--ease),visibility 0s linear .25s,background .2s,color .2s
+}
+.to-top.is-visible {
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .25s,transform .25s var(--ease),visibility 0s,background .2s,color .2s
+}
+.to-top svg {
+  width:18px;
+  height:18px
+}
+.to-top span {
+  font:700 10px/1 var(--display);
+  letter-spacing:.08em
+}
+.to-top:hover {
+  background:var(--lime);
+  color:var(--ink)
+}
 .toast {
   position:fixed;
   z-index:220;
@@ -2136,6 +2176,12 @@ address {
   }
   .footer-bottom>a {
     white-space:nowrap
+  }
+  .to-top {
+    right:var(--s4);
+    bottom:calc(52px + var(--s3) + env(safe-area-inset-bottom));
+    width:48px;
+    height:48px
   }
   .mobile-booking {
     position:fixed;

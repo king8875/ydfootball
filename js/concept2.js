@@ -192,4 +192,10 @@
     catch { notify(`자동 복사가 지원되지 않습니다. 주소: ${address}`); }
   });
   $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
+
+  // 맨 위로 버튼: 첫 화면을 지나면 나타남
+  const toTop = $('.to-top');
+  const updateToTop = () => toTop.classList.toggle('is-visible', scrollY > innerHeight * .8);
+  addEventListener('scroll', updateToTop, { passive: true });
+  updateToTop();
 })();

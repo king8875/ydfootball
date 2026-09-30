@@ -192,6 +192,12 @@ address { font-style: normal; }
 .footer-meta { padding-top: 0; display: grid; grid-template-columns: 1fr 2fr auto; gap: 40px; align-items: end; color: var(--grey); font-size: 11px; }
 .footer-meta img { width: 190px; }
 .mobile-actions { display: none; }
+/* 맨 위로: 헤더 '예약 문의'와 같은 사각 · 선 스타일 */
+.to-top { position: fixed; z-index: 80; right: var(--gutter); bottom: 28px; width: 56px; height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--black); color: var(--acid); border: 1px solid var(--line); opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .25s, transform .25s, visibility 0s linear .25s, border-color .2s; }
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; transition: opacity .25s, transform .25s, visibility 0s, border-color .2s; }
+.to-top svg { width: 18px; height: 18px; }
+.to-top span { color: var(--white); font-size: 9px; font-weight: 700; letter-spacing: .12em; }
+.to-top:hover { border-color: var(--acid); }
 .toast { position: fixed; z-index: 200; left: 50%; bottom: 28px; translate: -50% 16px; opacity: 0; pointer-events: none; padding: 12px 18px; background: var(--acid); color: var(--black); font-size: 13px; transition: opacity .25s, translate .25s; }
 .toast.is-visible { opacity: 1; translate: -50% 0; }
 
@@ -308,6 +314,7 @@ address { font-style: normal; }
   .site-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
   .footer-meta { grid-template-columns: 1fr; gap: 20px; }
   .footer-meta img { width: 170px; }
+  .to-top { right: 16px; bottom: calc(52px + 12px + env(safe-area-inset-bottom)); width: 48px; height: 48px; }
   .mobile-actions { position: fixed; z-index: 90; inset: auto 0 0; display: grid; grid-template-columns: 1fr 1.8fr; padding-bottom: env(safe-area-inset-bottom); background: var(--black); border-top: 1px solid var(--line); }
   .mobile-actions a { padding: 15px; text-align: center; font-size: 13px; font-weight: 700; }
   .mobile-actions a:last-child { background: var(--acid); color: var(--black); }
