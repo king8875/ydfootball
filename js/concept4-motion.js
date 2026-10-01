@@ -33,18 +33,24 @@
       initialized = true;
       const { gsap, ScrollTrigger } = window;
       gsap.registerPlugin(ScrollTrigger);
-      // 창 크기를 바꾸면 ScrollTrigger가 위치를 다시 재는데(refresh), 이때 잠깐 스크롤을 맨 위로 옮겼다 되돌립니다.
-      // html에 scroll-behavior: smooth가 걸려 있으면 이 이동이 애니메이션되어 중간 위치를 재게 되고,
-      // word-band 시작 · 끝 위치가 수천 px 어긋나 스크롤 연출이 엉뚱한 곳에서 움직였음 → 재는 동안만 smooth 해제
+      // html의 scroll-behavior: smooth가 켜져 있으면 ScrollTrigger가 위치를 다시 잴 때(refresh)
+      // 스크롤 값을 잘못 읽어 word-band 시작 · 끝이 현재 스크롤만큼 어긋남(창을 1024px 아래로 줄였다 키우면 재현)
+      // → 모션이 켜져 있는 동안은 CSS smooth를 끄고, 페이지 안 링크 이동만 JS로 부드럽게 처리
       const root = document.documentElement;
-      ScrollTrigger.addEventListener("refreshInit", () => { root.style.scrollBehavior = "auto"; });
-      // refresh 이벤트 뒤에도 ScrollTrigger가 스크롤 위치를 되돌리므로, 한 프레임 뒤에 smooth를 되살림
-      ScrollTrigger.addEventListener("refresh", () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => { root.style.scrollBehavior = ""; }));
-      });
+      const onAnchorClick = (event) => {
+        const link = event.target.closest('a[href^="#"]');
+        if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
+        const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+        if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+      };
       const mm = gsap.matchMedia();
       mm.add(query, () => {
         document.documentElement.classList.add("desktop-motion");
+        root.style.scrollBehavior = "auto";
+        document.addEventListener("click", onAnchorClick);
         const band = document.querySelector(".word-band");
         const scrollSettings = {
           trigger: band,
@@ -82,8 +88,11 @@
               },
             );
           });
-        return () =>
+        return () => {
           document.documentElement.classList.remove("desktop-motion");
+          root.style.scrollBehavior = "";
+          document.removeEventListener("click", onAnchorClick);
+        };
       });
       document.fonts.ready.then(() => ScrollTrigger.refresh());
       if (document.readyState === "complete") ScrollTrigger.refresh();
