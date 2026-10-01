@@ -2226,14 +2226,14 @@ html.js-ready [data-anim].is-inview {
 
 /* Yongdu brand-only substitutions. Original layout and typography retained. */
 :root{--blue:#000;--garnet:#000;--gold:#b8ff3c;--ink:#000;--navy:#000;--muted:#666;--soft:#fff;--kakao:#b8ff3c;--naver:#b8ff3c;}
-.logo .yd-loader-logo{width:210px;height:44px;object-fit:contain;object-position:left center;}
+.logo .yd-loader-logo{width:auto;height:54px;object-fit:contain;object-position:left center;}
 .loader-mark .yd-loader-logo{width:240px;height:auto;}
 .btn-naver,.btn-kakao{color:#000;}
 .about-section,.features-section,.rental-section,.youth-section,.pricing-section,.faq-section{background:#fff;}
 .dark-section,.site-footer{background:#000;}
 
 .hero-slide.blue::after,.hero-slide.garnet::after,.hero-slide.neutral::after{background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.2));}
-@media(max-width:860px){.logo .yd-loader-logo{width:170px;height:36px;}}
+@media(max-width:860px){.logo .yd-loader-logo{width:auto;height:44px;}}
 
 /* Video, telephone-only contact, equipment and section contrast revision */
 .video-hero .hero-image{opacity:1;transform:none;filter:none;object-fit:cover;}
