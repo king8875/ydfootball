@@ -16,7 +16,11 @@
 | 1 | `index.html` · `css/style.css` · `js/main.js` | 기본안. 단색 면 + 가로 선. GSAP ScrollTrigger + Lenis |
 | 2 | `index2.html` · `css/concept2.css` · `js/concept2.js` | MATCHDAY. 라임 · 잉크, 티켓형 요금 카드 |
 | 3 | `index3.html` · `css/concept3.css` · `js/concept3.js` | 스크롤 시네마틱. 블랙 · acid, sticky 장면 |
+| 4 | `index4.html` · `css/concept4.css` · `js/concept4.js` · `js/concept4-motion.js` | 참고 사이트 기반. 히어로 영상, 로더, 모바일 슬라이더. 집에서 만든 zip 시안을 정적 HTML로 변환 |
 
+- **마크업은 반드시 HTML에 직접 씁니다.** JS로 `innerHTML`을 만들어 넣는 구조(빈 `<div id="root">` + 렌더 함수)는 검색엔진이 내용을 못 읽으므로 쓰지 않습니다. 시안 4도 원래 이런 구조였는데, 렌더 결과를 정적 HTML로 옮기고 JS에는 동작만 남겼습니다.
+- 시안 4의 문구 · 사진은 `index4.html`에서 고칩니다. `js/concept4.js`에는 데이터 배열이 없습니다. 시안 4 전용 에셋은 `assets/brand/`, `assets/video/`, `assets/vendor/`, `assets/fonts/`, `assets/images/52xx-*.webp`입니다.
+- 시안 4의 섹션 구성 · 메뉴(구장소개 / 시설안내 / 장비대여 / 이용안내 / 미리보기 / 대관안내 / FAQ)는 아직 공통 구성으로 맞추지 않았습니다.
 - 시안 2 · 3은 `noindex`입니다. 검색엔진용 구조화 데이터(JSON-LD)는 시안 1에만 있습니다.
 - 로컬 미리보기: `python3 -m http.server 5510` → http://localhost:5510 (`/index2.html`, `/index3.html`)
 
@@ -94,6 +98,8 @@ AI가 만든 듯한 디자인은 쓰지 않습니다.
 - **`position: sticky` 조건:** 조상에 `overflow:hidden`이 있으면 동작하지 않습니다(`overflow:clip`을 쓸 것). grid 아이템은 `align-self:start`가 필요합니다.
 - **시안 1 헤더 숨김:** 같은 방향으로 12px 이상 움직였을 때만 바뀝니다. Lenis 감속 중 위치가 그대로인 프레임에서 깜빡이던 문제를 고친 것입니다.
 - **시안 1 Lenis 앵커 이동:** `offset`을 주지 않습니다. `html`의 `scroll-padding-top`이 이미 반영됩니다. 주면 헤더 높이만큼 두 번 밀립니다.
+- **GSAP ScrollTrigger + CSS `scroll-behavior: smooth`를 같이 쓰면** 창 크기를 바꿀 때 위치 계산이 수천 px 어긋납니다(refresh 중 스크롤 이동이 애니메이션됨). 시안 4는 `refreshInit`에서 smooth를 끄고 refresh가 끝난 뒤 한 프레임 늦게 되살립니다.
+- **펼침 영역에 고정 `max-height`(예: 220px)를 쓰지 마세요.** 글자가 늘어나면 잘립니다. 시안 4 푸터는 `grid-template-rows: 0fr → 1fr` + 안쪽 `.collapse-inner`로 내용 높이만큼 펼칩니다.
 - **갤러리 가로 스크롤(시안 1):** 사진은 미리 decode합니다. `scrub: true`로 두어 Lenis와 이중 보간하지 않습니다.
 - **미디어 쿼리에 블록을 추가할 때는 기존 블록을 중간에서 닫지 마세요.** 레이아웃 규칙이 다른 조건 안으로 들어가 깨진 적이 있습니다. 수정 후 `{` / `}` 개수가 맞는지 확인하세요.
 - 로컬 서버가 CSS · JS를 캐시하므로, 변경이 안 보이면 강력 새로고침(Cmd + Shift + R)을 합니다.
