@@ -737,7 +737,7 @@ html.js-ready [data-anim].is-inview {
 }
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
 }
 .feature-card {
@@ -1533,7 +1533,7 @@ html.js-ready [data-anim].is-inview {
     gap: 18px;
   }
   .feature-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .gallery-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2432,3 +2432,8 @@ h3,
     font-size: 12px;
   }
 }
+
+/* 오시는 길: 대관비 안내와 분리한 흰 배경 띠 */
+.location-strip{position:relative;z-index:1;background:#fff;color:#111;padding:40px 0;border-top:1px solid #e6e6e6;}
+.location-strip .booking-location{margin:0 auto;}
+@media(max-width:860px){.location-strip{padding:28px 0;}}
