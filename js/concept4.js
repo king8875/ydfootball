@@ -80,11 +80,15 @@ function initHero() {
 function initGallery() {
  const cards=[...document.querySelectorAll('[data-gallery-image]')]; let active=0,dialog,opener;
  const show=(index)=>{active=(index+cards.length)%cards.length;const card=cards[active];dialog.querySelector('img').src=card.dataset.galleryImage;dialog.querySelector('img').alt=card.dataset.galleryLabel;dialog.querySelector('figcaption').textContent=`${card.dataset.galleryLabel} · ${active+1} / ${cards.length}`;};
- const close=()=>{dialog?.close();dialog?.remove();dialog=null;document.body.style.overflow='';opener?.focus();};
+ const FADE_MS=matchMedia('(prefers-reduced-motion: reduce)').matches?0:300;
+ // 닫기: .is-visible을 떼서 페이드 아웃 → 끝난 뒤 dialog 제거 (중복 클릭 방지)
+ const close=()=>{if(!dialog||dialog.dataset.closing)return;const d=dialog;d.dataset.closing='1';d.classList.remove('is-visible');setTimeout(()=>{d.close();d.remove();if(dialog===d)dialog=null;document.body.style.overflow='';opener?.focus();},FADE_MS);};
  cards.forEach((card,index)=>card.addEventListener('click',()=>{
  opener=card;dialog=document.createElement('dialog');dialog.className='lightbox gallery-dialog';dialog.setAttribute('aria-label','풋살장 사진 크게 보기');
  dialog.innerHTML=`<button class="lightbox-close" aria-label="미리보기 닫기">×</button><button class="gallery-prev" aria-label="이전 사진">${icon('arrowLeft',26)}</button><figure><img alt=""><figcaption aria-live="polite"></figcaption></figure><button class="gallery-next" aria-label="다음 사진">${icon('arrowRight',26)}</button>`;
  document.body.append(dialog);show(index);dialog.showModal();document.body.style.overflow='hidden';
+ // 열기: 투명 상태(opacity 0)를 먼저 확정한 뒤 .is-visible을 붙여 페이드 인 (프레임 타이밍에 의존하지 않음)
+ getComputedStyle(dialog).opacity;dialog.classList.add('is-visible');
  dialog.querySelector('.lightbox-close').onclick=close;dialog.querySelector('.gallery-prev').onclick=()=>show(active-1);dialog.querySelector('.gallery-next').onclick=()=>show(active+1);
  dialog.addEventListener('cancel',e=>{e.preventDefault();close();});dialog.addEventListener('click',e=>{if(e.target===dialog)close();});
  dialog.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();show(active-1);}if(e.key==='ArrowRight'){e.preventDefault();show(active+1);}});

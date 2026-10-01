@@ -1230,6 +1230,7 @@ html.js-ready [data-anim].is-inview {
   transition: max-height 0.32s ease;
 }
 .faq-answer p {
+  max-width: 95%;
   margin: 0;
   padding: 0 20px 20px 66px;
   color: var(--muted);
@@ -2384,4 +2385,48 @@ main > .section{position:relative;z-index:1;}
 @media (prefers-reduced-motion: reduce) {
   .sweep-btn:hover .sweep-btn__layer,
   .sweep-btn:focus-visible .sweep-btn__layer { animation: none; }
+}
+
+/* ===== 갤러리 확대 보기(lightbox): 열 때 · 닫을 때 페이드 =====
+   JS가 열 때 투명 상태를 확정한 뒤 .is-visible을 붙이고, 닫을 때는 떼고 페이드가 끝난 뒤 제거 */
+.gallery-dialog,
+.gallery-dialog::backdrop {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.gallery-dialog.is-visible,
+.gallery-dialog.is-visible::backdrop { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .gallery-dialog, .gallery-dialog::backdrop { transition: none; }
+}
+
+/* 타이포그래피 보정: 한글 단어 단위 줄바꿈, 모바일 본문 크기, 제목 줄간격 */
+body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+h3,
+.faq-item strong,
+.mobile-drawer nav a {
+  line-height: 1.3;
+}
+@media (max-width: 860px) {
+  .section-head p:not(.eyebrow),
+  .rental-copy p:not(.eyebrow),
+  .pitch-card p,
+  .feature-card p,
+  .youth-note,
+  .address-banner p,
+  .faq-answer p,
+  .footer-intro {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .price-card li,
+  .biz-content p {
+    font-size: 13px;
+  }
+  .footer-bottom {
+    font-size: 12px;
+  }
 }
