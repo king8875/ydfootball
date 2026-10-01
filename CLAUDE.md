@@ -99,6 +99,7 @@ AI가 만든 듯한 디자인은 쓰지 않습니다.
 - **시안 1 헤더 숨김:** 같은 방향으로 12px 이상 움직였을 때만 바뀝니다. Lenis 감속 중 위치가 그대로인 프레임에서 깜빡이던 문제를 고친 것입니다.
 - **시안 1 Lenis 앵커 이동:** `offset`을 주지 않습니다. `html`의 `scroll-padding-top`이 이미 반영됩니다. 주면 헤더 높이만큼 두 번 밀립니다.
 - **GSAP ScrollTrigger + CSS `scroll-behavior: smooth`를 같이 쓰면** 창 크기를 바꿀 때 위치 계산이 수천 px 어긋납니다(refresh 중 스크롤 이동이 애니메이션됨). 시안 4는 `refreshInit`에서 smooth를 끄고 refresh가 끝난 뒤 한 프레임 늦게 되살립니다.
+- **시안 4 hero는 `position: sticky`로 뒤 섹션 아래에 깔려 있습니다.** 모바일에서 빠르게 스크롤하면 섹션이 그려지기 전에 hero가 비쳐 보이므로, 한 화면 이상 벗어나면 `.is-offscreen`(visibility:hidden)으로 숨기고 영상도 멈춥니다.
 - **펼침 영역에 고정 `max-height`(예: 220px)를 쓰지 마세요.** 글자가 늘어나면 잘립니다. 시안 4 푸터는 `grid-template-rows: 0fr → 1fr` + 안쪽 `.collapse-inner`로 내용 높이만큼 펼칩니다.
 - **갤러리 가로 스크롤(시안 1):** 사진은 미리 decode합니다. `scrub: true`로 두어 Lenis와 이중 보간하지 않습니다.
 - **미디어 쿼리에 블록을 추가할 때는 기존 블록을 중간에서 닫지 마세요.** 레이아웃 규칙이 다른 조건 안으로 들어가 깨진 적이 있습니다. 수정 후 `{` / `}` 개수가 맞는지 확인하세요.

@@ -74,7 +74,22 @@ function initHero() {
  const mobile=matchMedia('(max-width:860px)').matches;
  video.poster=`assets/video/hero-poster-${mobile?'mobile':'desktop'}.jpg`;
  video.src=`assets/video/hero-${mobile?'mobile':'desktop'}.mp4`;
- if(!matchMedia('(prefers-reduced-motion: reduce)').matches) video.play().catch(()=>{});
+ const autoplay=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(autoplay) video.play().catch(()=>{});
+ // 고정(sticky) hero가 뒤 섹션 아래에 계속 깔려 있으면, 모바일에서 빠르게 스크롤할 때
+ // 섹션이 그려지기 전 hero가 비쳐 보임 → 한 화면 이상 벗어나면 숨기고 영상도 멈춤
+ const hero=document.querySelector('.video-hero');
+ let hidden=false;
+ const update=()=>{
+  const next=scrollY>hero.offsetHeight+innerHeight;
+  if(next===hidden) return;
+  hidden=next;
+  hero.classList.toggle('is-offscreen',hidden);
+  if(hidden) video.pause(); else if(autoplay) video.play().catch(()=>{});
+ };
+ addEventListener('scroll',update,{passive:true});
+ addEventListener('resize',update);
+ update();
 }
 
 function initGallery() {
@@ -85,7 +100,7 @@ function initGallery() {
  const close=()=>{if(!dialog||dialog.dataset.closing)return;const d=dialog;d.dataset.closing='1';d.classList.remove('is-visible');setTimeout(()=>{d.close();d.remove();if(dialog===d)dialog=null;document.body.style.overflow='';opener?.focus();},FADE_MS);};
  cards.forEach((card,index)=>card.addEventListener('click',()=>{
  opener=card;dialog=document.createElement('dialog');dialog.className='lightbox gallery-dialog';dialog.setAttribute('aria-label','풋살장 사진 크게 보기');
- dialog.innerHTML=`<button class="lightbox-close" aria-label="미리보기 닫기">×</button><button class="gallery-prev" aria-label="이전 사진">${icon('arrowLeft',26)}</button><figure><img alt=""><figcaption aria-live="polite"></figcaption></figure><button class="gallery-next" aria-label="다음 사진">${icon('arrowRight',26)}</button>`;
+ dialog.innerHTML=`<button class="lightbox-close" aria-label="미리보기 닫기">${icon('x',22)}</button><button class="gallery-prev" aria-label="이전 사진">${icon('arrowLeft',26)}</button><figure><img alt=""><figcaption aria-live="polite"></figcaption></figure><button class="gallery-next" aria-label="다음 사진">${icon('arrowRight',26)}</button>`;
  document.body.append(dialog);show(index);dialog.showModal();document.body.style.overflow='hidden';
  // 열기: 투명 상태(opacity 0)를 먼저 확정한 뒤 .is-visible을 붙여 페이드 인 (프레임 타이밍에 의존하지 않음)
  getComputedStyle(dialog).opacity;dialog.classList.add('is-visible');

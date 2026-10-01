@@ -1016,8 +1016,9 @@ html.js-ready [data-anim].is-inview {
   border: 1px solid rgba(255,255,255, 0.3);
   background: rgba(255,255,255, 0.12);
   color: #ffffff;
-  font-size: 30px;
-  line-height: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
   cursor: pointer;
 }
 
@@ -2271,6 +2272,7 @@ html.js-ready [data-anim].is-inview {
 body{overflow-x:clip;}
 main{position:relative;isolation:isolate;}
 .video-hero{position:sticky;top:0;z-index:0;}
+.video-hero.is-offscreen{visibility:hidden;}
 main > .section{position:relative;z-index:1;}
 @media(prefers-reduced-motion:reduce){.video-hero{position:relative;}}
 
